@@ -3,16 +3,16 @@
     "baseUrl": ".",
     "paths": {
       "@/*": [
-        "./src/*"
+        "./*"
       ],
       "@backend/*": [
-        "./src/backend/*"
+        "./Backend/*"
       ],
       "@frontend/*": [
-        "./src/frontend/*"
+        "./Frontend/*"
       ],
       "@shared/*": [
-        "./src/shared/*"
+        "./Shared/*"
       ]
     }
   }
