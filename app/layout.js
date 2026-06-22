@@ -21,7 +21,7 @@ export default function RootLayout({ children }) {
         baseTheme: dark,
       }}
     >
-      <html lang="en" className="dark">
+      <html lang="en" suppressHydrationWarning>
         <body className={`${inter.className} min-h-screen antialiased`}>
           {children}
           <Toaster richColors />
