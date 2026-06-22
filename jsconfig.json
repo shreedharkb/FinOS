@@ -11,8 +11,8 @@
       "@frontend/*": [
         "./Frontend/*"
       ],
-      "@shared/*": [
-        "./Shared/*"
+      "@frontend/shared/*": [
+        "./Frontend/shared/*"
       ]
     }
   }

@@ -26,6 +26,7 @@ const Header = () => {
 
   // Close mobile menu on route change
   useEffect(() => {
+    // eslint-disable-next-line
     setMobileMenuOpen(false);
   }, [pathname]);
 
@@ -64,6 +65,19 @@ const Header = () => {
                 >
                   <LayoutDashboard className="w-4 h-4" />
                   Dashboard
+                </Button>
+              </Link>
+              <Link href="/transactions">
+                <Button
+                  variant="ghost"
+                  className={`gap-2 text-sm ${
+                    pathname === "/transactions"
+                      ? "bg-white/10 text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Terminal className="w-4 h-4" />
+                  Transactions
                 </Button>
               </Link>
               <Link href="/transaction/create">
@@ -135,6 +149,19 @@ const Header = () => {
                 >
                   <LayoutDashboard className="w-4 h-4" />
                   Dashboard
+                </Button>
+              </Link>
+              <Link href="/transactions" className="block">
+                <Button
+                  variant="ghost"
+                  className={`w-full justify-start gap-2 ${
+                    pathname === "/transactions"
+                      ? "bg-white/10 text-foreground"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  <Terminal className="w-4 h-4" />
+                  Transactions
                 </Button>
               </Link>
               <Link href="/transaction/create" className="block">

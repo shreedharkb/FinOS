@@ -63,7 +63,13 @@ export async function createTransaction(data) {
     revalidatePath("/dashboard");
     revalidatePath(`/account/${data.accountId}`);
 
-    return { success: true, data: transaction };
+    return {
+      success: true,
+      data: {
+        ...transaction,
+        amount: transaction.amount.toNumber(),
+      },
+    };
   } catch (error) {
     console.error("Error creating transaction:", error);
     throw new Error(error.message || "Failed to create transaction");

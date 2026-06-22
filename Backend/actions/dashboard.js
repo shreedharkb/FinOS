@@ -51,7 +51,17 @@ export async function createAccount(data) {
     });
 
     revalidatePath("/dashboard");
-    return { success: true, data: { ...account, initialTransaction } };
+    return {
+      success: true,
+      data: {
+        ...account,
+        balance: account.balance.toNumber(),
+        initialTransaction: {
+          ...initialTransaction,
+          amount: initialTransaction.amount.toNumber(),
+        },
+      },
+    };
   } catch (error) {
     console.error("Error creating account:", error);
     throw new Error(error.message || "Failed to create account");
@@ -75,7 +85,10 @@ export async function getUserAccounts() {
       },
     });
 
-    return accounts;
+    return accounts.map((a) => ({
+      ...a,
+      balance: a.balance.toNumber(),
+    }));
   } catch (error) {
     console.error("Error getting accounts:", error);
     throw new Error(error.message);
@@ -101,7 +114,7 @@ export async function updateDefaultAccount(accountId) {
     });
 
     revalidatePath("/dashboard");
-    return { success: true, data: account };
+    return { success: true, data: { ...account, balance: account.balance.toNumber() } };
   } catch (error) {
     console.error("Error updating default account:", error);
     throw new Error(error.message);

@@ -11,7 +11,7 @@
   },
   "aliases": {
     "components": "@frontend/components",
-    "utils": "@shared/utils/utils",
+    "utils": "@frontend/shared/utils/utils",
     "ui": "@frontend/components/ui",
     "lib": "@backend",
     "hooks": "@frontend/hooks"

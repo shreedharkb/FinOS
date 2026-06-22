@@ -67,7 +67,7 @@ export default function EmailTemplate({
             <Heading style={h1}>Budget Alert</Heading>
             <Text style={text}>Hello {userName},</Text>
             <Text style={text}>
-              You've used {data?.percentageUsed.toFixed(1)}% of your monthly
+              You&apos;ve used {data?.percentageUsed.toFixed(1)}% of your monthly
               budget.
             </Text>
             <Section style={statsContainer}>

@@ -24,6 +24,7 @@ export async function getAccountWithTransactions(accountId) {
 
     return {
       ...account,
+      balance: account.balance.toNumber(),
       transactions: account.transactions.map((t) => ({
         ...t,
         amount: t.amount.toNumber(),

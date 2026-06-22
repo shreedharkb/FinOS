@@ -1,4 +1,4 @@
-import Header from "@frontend/components/Header";
+import Header from "@frontend/components/layout/Header";
 
 export default function MainLayout({ children }) {
   return (

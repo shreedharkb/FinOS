@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
-import { cn } from "@shared/utils/utils";
+import { cn } from "@frontend/shared/utils/utils";
 
 function Select({ ...props }) {
   return <SelectPrimitive.Root data-slot="select" {...props} />;

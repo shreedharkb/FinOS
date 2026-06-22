@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "@shared/utils/utils";
+import { cn } from "@frontend/shared/utils/utils";
 
 function Table({ className, ...props }) {
   return (

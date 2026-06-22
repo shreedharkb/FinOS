@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# FinOS — Your Financial Operating System
+
+An intelligent, AI-powered personal finance tracker built with Next.js 15, Prisma, and Tailwind CSS. FinOS features a stunning dark glassmorphism UI and leverages machine learning to automatically scan receipts and generate financial insights.
+
+## Features
+
+- 🌓 **Premium Dark Glassmorphism UI**: Beautiful, responsive design with smooth animations.
+- 🤖 **AI Receipt Scanning**: Upload receipts and let Gemini AI automatically extract the amount, date, and categorize the transaction.
+- 🏦 **Multi-Account Tracking**: Manage multiple checking and savings accounts from one dashboard.
+- 📊 **Dynamic Budgeting**: Track your monthly expenses against customizable budgets with visual progress indicators.
+- 🔄 **Recurring Transactions**: Automatically handle subscriptions and recurring income.
+- 🛡️ **Rate-Limiting & Security**: Protected by Arcjet to prevent abuse and brute-force attacks.
+- 📧 **Automated Reports**: Uses Inngest and Resend to deliver personalized monthly financial summaries and budget alerts to your inbox.
+- 🔐 **Authentication**: Secure, seamless user management powered by Clerk.
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **Database**: PostgreSQL (via Supabase)
+- **ORM**: Prisma
+- **Authentication**: Clerk
+- **AI**: Google Generative AI (Gemini 1.5 Flash)
+- **Background Jobs**: Inngest
+- **Security**: Arcjet
+- **Emails**: React Email + Resend
+- **Styling**: Tailwind CSS v4 + Framer Motion
+- **Components**: shadcn/ui
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Copy `.env.example` to `.env` and fill in your API keys (Clerk, Database URL, Gemini API, Inngest, Resend, Arcjet)
+4. Push the database schema: `npx prisma db push`
+5. Generate Prisma client: `npx prisma generate`
+6. Run the development server: `npm run dev`
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Project Architecture
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+This project is built using a strict, domain-driven modular architecture:
+- `/Frontend`: Client-side UI components, React hooks, and Zod schemas.
+- `/Backend`: Server actions, database schema, background jobs, and security layers.
+- `/Shared`: Shared utilities and constants.
+- `/app`: Next.js App Router mapping.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## License
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
