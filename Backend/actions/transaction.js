@@ -137,3 +137,109 @@ function calculateNextRecurringDate(startDate, interval) {
   }
   return date;
 }
+
+
+export async function getTransaction(id) {
+  const user = await checkUser();
+  if (!user) throw new Error("Unauthorized");
+
+  const transaction = await db.transaction.findUnique({
+    where: {
+      id,
+      userId: user.id,
+    },
+  });
+
+  if (!transaction) throw new Error("Transaction not found");
+
+  return { ...transaction, amount: transaction.amount.toNumber() };
+}
+
+export async function updateTransaction(id, data) {
+  try {
+    const user = await checkUser();
+    if (!user) throw new Error("Unauthorized");
+
+    const originalTransaction = await db.transaction.findUnique({
+      where: {
+        id,
+        userId: user.id,
+      },
+      include: {
+        account: true,
+      },
+    });
+
+    if (!originalTransaction) throw new Error("Transaction not found");
+
+    const oldBalanceChange =
+      originalTransaction.type === "EXPENSE"
+        ? -originalTransaction.amount.toNumber()
+        : originalTransaction.amount.toNumber();
+
+    const newBalanceChange =
+      data.type === "EXPENSE" ? -data.amount : data.amount;
+
+    const netBalanceChange = newBalanceChange - oldBalanceChange;
+
+    const transaction = await db.$transaction(async (tx) => {
+      const updated = await tx.transaction.update({
+        where: {
+          id,
+          userId: user.id,
+        },
+        data: {
+          ...data,
+          nextRecurringDate:
+            data.isRecurring && data.recurringInterval
+              ? calculateNextRecurringDate(data.date, data.recurringInterval)
+              : null,
+        },
+      });
+
+      await tx.account.update({
+        where: { id: data.accountId },
+        data: {
+          balance: {
+            increment: netBalanceChange,
+          },
+        },
+      });
+
+      return updated;
+    });
+
+    revalidatePath("/dashboard");
+    revalidatePath(`/account/${data.accountId}`);
+
+    return { success: true, data: { ...transaction, amount: transaction.amount.toNumber() } };
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function getUserTransactions(query = {}) {
+  try {
+    const user = await checkUser();
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
+
+    const transactions = await db.transaction.findMany({
+      where: {
+        userId: user.id,
+        ...query,
+      },
+      include: {
+        account: true,
+      },
+      orderBy: {
+        date: "desc",
+      },
+    });
+
+    return { success: true, data: transactions.map(t => ({ ...t, amount: t.amount.toNumber() })) };
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}

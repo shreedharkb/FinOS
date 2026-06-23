@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { Inter, Outfit } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { Toaster } from "sonner";
@@ -10,6 +10,11 @@ import "./globals.css";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-heading",
 });
 
 export const metadata = {
@@ -26,7 +31,7 @@ export default function RootLayout({ children }) {
       }}
     >
       <html lang="en" suppressHydrationWarning>
-        <body className={`${inter.variable} ${inter.className} min-h-screen antialiased bg-background text-foreground`}>
+        <body className={`${inter.variable} ${outfit.variable} ${inter.className} min-h-screen antialiased bg-background text-foreground`}>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"

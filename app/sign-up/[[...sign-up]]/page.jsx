@@ -33,6 +33,7 @@ export default function SignUpPage() {
 
       <div className="z-10 w-full flex items-center justify-center">
         <SignUp
+          fallbackRedirectUrl="/dashboard"
           appearance={{
             baseTheme: dark,
             variables: {
