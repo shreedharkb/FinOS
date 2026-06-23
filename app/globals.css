@@ -241,3 +241,157 @@
 [data-slot='button'][data-size='default']:not(.px-6) {
   @apply px-3;
 }
+
+/* ============================================
+   CLERK AUTH COMPONENT OVERRIDES
+   Forces all interactive elements to be uniform
+   ============================================ */
+
+/* All Clerk inputs - force height and font size */
+.cl-formFieldInput,
+.cl-input {
+  height: 3.25rem !important;
+  min-height: 3.25rem !important;
+  font-size: 1.1rem !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  border-radius: 0.75rem !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  transition: all 0.2s ease !important;
+}
+
+.cl-formFieldInput:hover,
+.cl-input:hover {
+  background: rgba(255, 255, 255, 0.07) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.cl-formFieldInput:focus,
+.cl-input:focus {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: #22d3ee !important;
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15), 0 0 20px rgba(34, 211, 238, 0.1) !important;
+  outline: none !important;
+}
+
+.cl-formFieldInput::placeholder,
+.cl-input::placeholder {
+  font-size: 1.05rem !important;
+  color: #71717a !important;
+}
+
+/* All Clerk buttons - Continue button */
+.cl-formButtonPrimary {
+  height: 3.25rem !important;
+  min-height: 3.25rem !important;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  border-radius: 0.75rem !important;
+  background: #00d4ff !important;
+  border: none !important;
+  color: #000000 !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3) !important;
+}
+
+.cl-formButtonPrimary:hover {
+  background: #33ddff !important;
+  box-shadow: 0 6px 25px rgba(0, 212, 255, 0.4) !important;
+  transform: translateY(-2px) !important;
+}
+
+.cl-formButtonPrimary:active {
+  transform: translateY(0) !important;
+  background: #00b8e6 !important;
+  box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3) !important;
+}
+
+/* Social / OAuth buttons - Continue with Google */
+.cl-socialButtonsBlockButton {
+  height: 3.25rem !important;
+  min-height: 3.25rem !important;
+  font-size: 1.1rem !important;
+  border-radius: 0.75rem !important;
+  background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.cl-socialButtonsBlockButton:hover {
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.06) 100%) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+  transform: translateY(-2px) !important;
+}
+
+.cl-socialButtonsBlockButton:active {
+  transform: translateY(0) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Form field labels */
+.cl-formFieldLabel {
+  font-size: 1.05rem !important;
+  font-weight: 600 !important;
+  color: #e4e4e7 !important;
+}
+
+/* Identity preview box */
+.cl-identityPreview {
+  height: 3.25rem !important;
+  min-height: 3.25rem !important;
+  border-radius: 0.75rem !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  font-size: 1.05rem !important;
+  transition: all 0.2s ease !important;
+}
+
+.cl-identityPreview:hover {
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* OTP code inputs */
+.cl-otpCodeFieldInput {
+  height: 3.25rem !important;
+  min-height: 3.25rem !important;
+  font-size: 1.25rem !important;
+  border-radius: 0.75rem !important;
+  transition: all 0.2s ease !important;
+}
+
+.cl-otpCodeFieldInput:focus {
+  border-color: #22d3ee !important;
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15) !important;
+}
+
+/* Footer text sizing */
+.cl-footerAction,
+.cl-footerActionLink {
+  font-size: 1.05rem !important;
+}
+
+.cl-footerActionLink {
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  transition: color 0.2s ease !important;
+}
+
+.cl-footerActionLink:hover {
+  color: #22d3ee !important;
+}
+
+/* Header */
+.cl-headerTitle {
+  font-size: 2.5rem !important;
+  font-weight: 800 !important;
+}
+
+.cl-headerSubtitle {
+  font-size: 1.15rem !important;
+}

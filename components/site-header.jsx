@@ -20,7 +20,7 @@ export function SiteHeader() {
           <nav className="flex items-center space-x-2 md:space-x-4">
             <Link href="/sign-in">
               <Button variant="ghost" className="hidden sm:inline-flex text-base font-medium px-4 h-10 hover:bg-transparent hover:text-cyan-400 transition-colors">
-                Log In
+                Sign In
               </Button>
             </Link>
             <Link href="/sign-up">
