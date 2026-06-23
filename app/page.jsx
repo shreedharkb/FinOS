@@ -6,6 +6,7 @@ import ShinyText from "@/components/shiny-text";
 import Ferrofluid from "@/components/ferrofluid";
 import MagicBento from "@/components/magic-bento";
 import HowItWorks from "@/components/how-it-works";
+import Footer from "@/components/footer";
 
 export default function LandingPage() {
   return (
@@ -92,6 +93,9 @@ export default function LandingPage() {
 
       {/* How It Works Section */}
       <HowItWorks />
+
+      {/* Footer */}
+      <Footer />
 
     </div>
   );

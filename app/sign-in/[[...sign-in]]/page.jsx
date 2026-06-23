@@ -1,7 +1,7 @@
 import { SignIn } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import Ferrofluid from "@/components/ferrofluid";
+import FloatingLines from "@/components/ui/floating-lines";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -22,22 +22,14 @@ const BOX_STYLE = {
 export default function SignInPage() {
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4 py-10">
-      <div className="absolute inset-0 -z-20 opacity-40">
-        <Ferrofluid
-          colors={["#5227FF", "#06b6d4", "#FF9FFC"]}
-          speed={0.5}
-          scale={1.6}
-          turbulence={1}
-          fluidity={0.1}
-          rimWidth={0.2}
-          sharpness={2.5}
-          shimmer={1.5}
-          glow={2}
-          flowDirection="down"
-          opacity={1}
+      <div style={{ position: 'absolute', inset: 0, zIndex: 0, width: '100%', height: '100%' }}>
+        <FloatingLines
+          linesGradient={["#5227FF", "#06b6d4", "#FF9FFC"]}
+          animationSpeed={1.5}
+          mixBlendMode="normal"
         />
       </div>
-      <div className="absolute top-1/2 left-1/2 -z-10 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-500/10 blur-[120px]" />
+      <div className="absolute top-1/2 left-1/2 z-[1] h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-500/10 blur-[120px]" />
 
       <div className="z-10 w-full flex items-center justify-center">
         <SignIn
