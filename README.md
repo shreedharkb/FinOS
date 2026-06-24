@@ -39,7 +39,6 @@
 - [💻 Tech Stack](#-tech-stack)
 - [📂 Project Structure](#-project-structure)
 - [🚀 Quick Start](#-quick-start)
-- [🗺️ Roadmap](#️-roadmap)
 - [📄 License](#-license)
 
 ---
@@ -76,62 +75,38 @@ Building a robust financial application requires careful consideration of securi
 The application is built on a modern, decoupled architecture ensuring scalability and separation of concerns.
 
 ```mermaid
-flowchart TB
-    classDef client fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#fff,rx:8px
-    classDef backend fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff,rx:8px
-    classDef db fill:#451a03,stroke:#fbbf24,stroke-width:2px,color:#fff,rx:8px
-    classDef ext fill:#4c1d95,stroke:#c084fc,stroke-width:2px,color:#fff,rx:8px
-    classDef security fill:#7f1d1d,stroke:#f87171,stroke-width:2px,color:#fff,rx:8px
-    classDef queue fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#fff,rx:8px
-
-    subgraph ClientLayer["🖥️ Frontend (Next.js 15 + React 19)"]
-        direction TB
-        UI["🎨 UI Components<br/>(Tailwind CSS + shadcn/ui)"]:::client
-        Hooks["🔄 Custom Hooks<br/>(State Management)"]:::client
-        Pages["📄 App Router Pages<br/>(/dashboard, /transactions)"]:::client
-        UI --> Pages
-        Hooks --> Pages
-    end
-
-    subgraph SecurityLayer["🛡️ Security & Auth"]
-        direction LR
-        Clerk["🔐 Clerk Authentication<br/>(Session Management)"]:::security
-        Arcjet["🛡️ Arcjet<br/>(Rate Limiting & Bot Protection)"]:::security
-    end
-
-    subgraph ServerLayer["⚙️ Backend (Next.js Server Actions)"]
-        direction TB
-        UserAction["👤 User Actions<br/>(Profile, Settings)"]:::backend
-        TransactionAction["💰 Transaction Actions<br/>(CRUD, Categorization)"]:::backend
-        BudgetAction["📊 Budget Actions<br/>(Tracking, Alerts)"]:::backend
-        ReceiptScan["🧾 Receipt Scanner<br/>(AI Processing)"]:::backend
-    end
-
-    subgraph DatabaseLayer["🗄️ Database (Supabase / PostgreSQL)"]
-        direction LR
-        Prisma["ORM: Prisma Client"]:::db
-        Tables[("Core Tables<br/>(User, Account, Transaction)")]:::db
-        Prisma <--> Tables
-    end
-
-    subgraph ExternalServices["🌐 External APIs & Workers"]
-        direction TB
-        Gemini["🤖 Google Gemini 1.5<br/>(Vision AI)"]:::ext
-        Inngest["⚙️ Inngest<br/>(Background Jobs)"]:::queue
-        Resend["📧 Resend<br/>(Email Delivery)"]:::ext
-    end
-
-    Pages -->|HTTP/Actions| SecurityLayer
-    SecurityLayer -->|Validated Requests| ServerLayer
+flowchart TD
+    A[👤 User Action\nUpload Receipt / Add Transaction] --> B[Next.js 15 Frontend\nReact 19 UI]
+    B --> C{🔐 Clerk Auth\nMiddleware}
     
-    UserAction <-->|Queries| Prisma
-    TransactionAction <-->|Queries| Prisma
-    BudgetAction <-->|Queries| Prisma
-    ReceiptScan <-->|Queries| Prisma
+    C -- ❌ Unauthenticated --> Z[Redirect to Login]
+    C -- ✅ Authenticated --> D{🛡️ Arcjet WAF\nRate Limit Check}
     
-    ReceiptScan <-->|Image Data| Gemini
-    BudgetAction -->|Threshold Triggers| Inngest
-    Inngest -->|Dispatch Email| Resend
+    D -- ❌ Blocked --> Y[Return 429 Error]
+    D -- ✅ Allowed --> E{Action Type}
+    
+    E -- 🧾 Receipt Upload --> F[🤖 Gemini 1.5 Vision\nExtract JSON]
+    F --> G[Parsed Data\nVendor · Amount · Date]
+    G --> H
+    
+    E -- 💰 Manual Entry --> H[Server Actions\nBusiness Logic]
+    
+    H --> I[🗄️ PostgreSQL via Prisma\nSave Transaction]
+    I --> J{Budget Check\nThreshold Exceeded?}
+    
+    J -- ✅ Yes --> K[⚙️ Inngest Queue\nBackground Event]
+    K --> L[📧 Resend\nTrigger Alert Email]
+    
+    J -- ❌ No --> M[📊 Update Dashboard UI\nOptimistic Update]
+    
+    style A fill:#0f172a,color:#38bdf8,stroke:#38bdf8
+    style B fill:#064e3b,color:#34d399,stroke:#34d399
+    style C fill:#7f1d1d,color:#f87171,stroke:#f87171
+    style D fill:#7f1d1d,color:#f87171,stroke:#f87171
+    style F fill:#4c1d95,color:#c084fc,stroke:#c084fc
+    style I fill:#451a03,color:#fbbf24,stroke:#fbbf24
+    style K fill:#312e81,color:#818cf8,stroke:#818cf8
+    style L fill:#4c1d95,color:#c084fc,stroke:#c084fc
 ```
 
 ---
@@ -291,17 +266,6 @@ Ensure the following variables are securely set in your `.env` file before runni
 | `RESEND_API_KEY` | Resend API Key for dispatching transactional emails |
 | `ARCJET_KEY` | Arcjet Key for web application firewall & rate limiting |
 | `INNGEST_EVENT_KEY` | Inngest Key to trigger background processes |
-
----
-
-## 🗺️ Roadmap
-
-- [ ] **Plaid Integration**: Allow users to securely connect directly to their bank accounts for automatic transaction fetching.
-- [ ] **Advanced AI Forecasting**: Utilize historical transaction data to predict future cash flow bottlenecks.
-- [ ] **Data Export**: Allow users to export their financial data to CSV and PDF formats for tax preparation.
-- [ ] **Mobile Application**: Port the web app to a native mobile experience using React Native.
-
----
 
 ## 📄 License
 
