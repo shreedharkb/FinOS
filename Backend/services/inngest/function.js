@@ -299,7 +299,7 @@ async function getMonthlyStats(userId, month) {
 
 async function generateFinancialInsights(stats, month) {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
   const prompt = `
     Analyze this financial data and provide 3 concise, actionable insights.
@@ -307,18 +307,23 @@ async function generateFinancialInsights(stats, month) {
     Keep it friendly, professional, and under 2 sentences per insight.
 
     Data for ${month}:
-    Total Income: $${stats.totalIncome}
-    Total Expenses: $${stats.totalExpenses}
+    Total Income: ₹${stats.totalIncome}
+    Total Expenses: ₹${stats.totalExpenses}
     Expenses by Category: ${Object.entries(stats.byCategory)
-      .map(([category, amount]) => `${category}: $${amount}`)
+      .map(([category, amount]) => `${category}: ₹${amount}`)
       .join(", ")}
+
+    Format the response as a pure JSON array of strings, like this:
+    ["insight 1", "insight 2", "insight 3"]
+    Return ONLY the JSON array, no markdown formatting.
   `;
 
   try {
     const result = await model.generateContent(prompt);
     const response = result.response;
     const text = response.text();
-    return text.split("\n").filter((line) => line.trim() !== "");
+    const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
+    return JSON.parse(cleanedText);
   } catch (error) {
     console.error("Error generating insights:", error);
     return [

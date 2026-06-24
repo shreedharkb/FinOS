@@ -32,11 +32,11 @@ export default function EmailTemplate({
             <Section style={statsContainer}>
               <div style={stat}>
                 <Text style={text}>Total Income</Text>
-                <Text style={heading}>${data?.stats.totalIncome}</Text>
+                <Text style={heading}>₹{data?.stats.totalIncome}</Text>
               </div>
               <div style={stat}>
                 <Text style={text}>Total Expenses</Text>
-                <Text style={heading}>${data?.stats.totalExpenses}</Text>
+                <Text style={heading}>₹{data?.stats.totalExpenses}</Text>
               </div>
             </Section>
 
@@ -73,11 +73,11 @@ export default function EmailTemplate({
             <Section style={statsContainer}>
               <div style={stat}>
                 <Text style={text}>Spent</Text>
-                <Text style={heading}>${data?.totalExpenses}</Text>
+                <Text style={heading}>₹{data?.totalExpenses}</Text>
               </div>
               <div style={stat}>
                 <Text style={text}>Budget</Text>
-                <Text style={heading}>${data?.budgetAmount}</Text>
+                <Text style={heading}>₹{data?.budgetAmount}</Text>
               </div>
             </Section>
           </Container>

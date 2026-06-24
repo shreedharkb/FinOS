@@ -56,18 +56,26 @@ export async function updateBudget(amount) {
     const user = await checkUser();
     if (!user) throw new Error("Unauthorized");
 
-    const budget = await db.budget.upsert({
-      where: {
-        userId: user.id, // Using the implicit relationship to find if a user has a budget
-      },
-      update: {
-        amount,
-      },
-      create: {
-        userId: user.id,
-        amount,
-      },
+    let budget = await db.budget.findFirst({
+      where: { userId: user.id },
     });
+
+    if (budget) {
+      budget = await db.budget.update({
+        where: { id: budget.id },
+        data: { 
+          amount,
+          lastAlertSent: null // Reset alert flag when budget changes
+        },
+      });
+    } else {
+      budget = await db.budget.create({
+        data: {
+          userId: user.id,
+          amount,
+        },
+      });
+    }
 
     return { success: true, data: { ...budget, amount: budget.amount.toNumber() } };
   } catch (error) {

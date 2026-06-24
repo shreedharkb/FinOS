@@ -97,7 +97,7 @@ const BlurText: React.FC<BlurTextProps> = ({
           duration: totalDuration,
           times,
           delay: (index * delay) / 1000,
-          ease: easing as unknown as string // motion/react type mismatch workaround
+          ease: easing as any // motion/react type mismatch workaround
         };
 
         return (

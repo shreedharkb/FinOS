@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { BarChart3 } from "lucide-react";
-
-
+import DecryptedText from "@/components/ui/decrypted-text";
 
 export default function Footer() {
   return (
@@ -13,11 +12,17 @@ export default function Footer() {
 
         {/* Logo + Brand */}
         <div className="flex flex-col items-center gap-4">
-          <div className="relative flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-400/15 to-violet-500/10 border border-cyan-500/25 shadow-[0_0_24px_rgba(34,211,238,0.1)]">
-            <BarChart3 className="h-6 w-6 text-cyan-400" strokeWidth={2.5} />
+          <div className="relative w-14 h-14 rounded-2xl overflow-hidden shadow-[0_0_24px_rgba(34,211,238,0.1)] hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-all">
+            <img src="/favicon.ico" alt="FinOS Logo" className="w-full h-full object-cover" />
           </div>
-          <span className="text-3xl font-black tracking-tighter text-white">
-            Fin<span className="text-cyan-400">OS</span>
+          <span className="font-bold text-3xl tracking-[0.1em] uppercase text-white flex items-center">
+            <DecryptedText text="Fin" animateOn="hover" />
+            <DecryptedText
+              text="OS"
+              className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent"
+              encryptedClassName="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent"
+              animateOn="hover"
+            />
           </span>
         </div>
 

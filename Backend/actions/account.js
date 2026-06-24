@@ -4,6 +4,7 @@ import { db } from "@backend/database/prisma";
 import { checkUser } from "@backend/security/checkUser";
 import { revalidatePath } from "next/cache";
 
+
 export async function getAccountWithTransactions(accountId) {
   try {
     const user = await checkUser();
@@ -56,9 +57,6 @@ export async function getDashboardData() {
     throw new Error(error.message);
   }
 }
-
-
-import { revalidatePath } from "next/cache";
 
 export async function bulkDeleteTransactions(transactionIds) {
   try {

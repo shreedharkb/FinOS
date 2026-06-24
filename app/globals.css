@@ -215,6 +215,7 @@
 
   html {
     @apply font-sans;
+    font-size: 17px; /* bump base so all rem values scale up across the entire app */
   }
 }
 
@@ -394,4 +395,278 @@
 
 .cl-headerSubtitle {
   font-size: 1.15rem !important;
+}
+
+/* ============================================
+   CLERK USER BUTTON - Navbar Avatar Size Fix
+   Tailwind classes in 'appearance' prop don't
+   get JIT-scanned, so we override here instead
+   ============================================ */
+
+/* The avatar circle button in the navbar */
+.cl-avatarBox {
+  width: 3.5rem !important;   /* 56px */
+  height: 3.5rem !important;  /* 56px */
+  border-radius: 9999px !important;
+  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.3) !important;
+  transition: box-shadow 0.2s ease !important;
+}
+
+.cl-avatarBox:hover {
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.6), 0 0 15px rgba(34, 211, 238, 0.3) !important;
+}
+
+/* The image inside the avatar */
+.cl-avatarImage {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Clerk popover dropdown card */
+.cl-userButtonPopoverCard {
+  width: 340px !important;
+  border-radius: 1rem !important;
+  padding: 0.5rem !important;
+}
+
+/* Name inside popover */
+.cl-userPreviewMainIdentifier {
+  font-size: 1.125rem !important;
+  font-weight: 700 !important;
+}
+
+.cl-userPreviewSecondaryIdentifier {
+  font-size: 0.95rem !important;
+}
+
+/* Action buttons inside dropdown */
+.cl-userButtonPopoverActionButton {
+  padding: 0.75rem 1rem !important;
+  font-size: 1rem !important;
+  border-radius: 0.75rem !important;
+}
+
+.cl-userButtonPopoverActionButtonText {
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+}
+
+.cl-userButtonPopoverActionButtonIcon {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+}
+
+/* Full UserProfile modal */
+.cl-modalContent {
+  width: min(900px, 95vw) !important;
+  max-width: 95vw !important;
+}
+
+.cl-profileSectionTitleText {
+  font-size: 1.125rem !important;
+  font-weight: 700 !important;
+}
+
+.cl-profileSectionContent {
+  font-size: 1rem !important;
+}
+
+.cl-navbarButton {
+  font-size: 1rem !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.cl-profilePage__title,
+.cl-page__title {
+  font-size: 1.75rem !important;
+  font-weight: 800 !important;
+}
+
+/* Badge text inside modal */
+.cl-badge {
+  font-size: 0.85rem !important;
+  padding: 0.2rem 0.6rem !important;
+}
+
+/* ============================================
+   CLERK PROFILE MODAL - Full inner text overrides
+   ============================================ */
+
+/* Left sidebar */
+.cl-navbar {
+  width: 220px !important;
+  padding: 1rem 0.5rem !important;
+}
+
+/* Sidebar title e.g. "Account" */
+.cl-navbarMobileMenuRow,
+.cl-profilePage .cl-headerTitle {
+  font-size: 1.6rem !important;
+  font-weight: 800 !important;
+}
+
+/* Sidebar subtitle e.g. "Manage your account info." */
+.cl-navbarMobileMenuRow p,
+.cl-profilePage .cl-headerSubtitle {
+  font-size: 1rem !important;
+}
+
+/* Sidebar nav buttons - "Profile", "Security" */
+.cl-navbarButton {
+  font-size: 1.05rem !important;
+  font-weight: 500 !important;
+  padding: 0.7rem 1rem !important;
+  border-radius: 0.6rem !important;
+}
+
+.cl-navbarButtonIcon {
+  width: 1.3rem !important;
+  height: 1.3rem !important;
+  margin-right: 0.5rem !important;
+}
+
+/* Profile page heading */
+.cl-profilePage__profile .cl-headerTitle,
+.cl-profilePage__security .cl-headerTitle {
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  margin-bottom: 1.5rem !important;
+}
+
+/* Section row labels - "Profile", "Email addresses", "Connected accounts" */
+.cl-profileSectionTitle {
+  padding: 1rem 0 0.5rem !important;
+}
+
+.cl-profileSectionTitleText {
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: inherit !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* Profile row - name and avatar */
+.cl-profileSectionItem {
+  padding: 0.75rem 0 !important;
+}
+
+/* User name text */
+.cl-userPreviewMainIdentifier,
+.cl-profileSection__profile .cl-userPreviewMainIdentifier {
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+}
+
+/* Email and secondary text */
+.cl-userPreviewSecondaryIdentifier {
+  font-size: 0.95rem !important;
+  opacity: 0.85;
+}
+
+/* "Update profile" / "Add email address" action link buttons */
+.cl-profileSectionPrimaryButton {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  padding: 0.5rem 1rem !important;
+  height: auto !important;
+  min-height: 2.5rem !important;
+}
+
+/* Email address rows */
+.cl-formattedPhoneNumber,
+.cl-profileSectionItemText {
+  font-size: 1rem !important;
+}
+
+/* "Primary" badge next to email */
+.cl-badge {
+  font-size: 0.85rem !important;
+  padding: 0.2rem 0.65rem !important;
+  border-radius: 9999px !important;
+  font-weight: 600 !important;
+}
+
+/* "Add email address" link */
+.cl-profileSectionItemButton,
+.cl-profileSectionSecondaryButton {
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  padding: 0.4rem 0 !important;
+}
+
+/* Three-dot menu icon buttons */
+.cl-profileSectionItemMore {
+  width: 2rem !important;
+  height: 2rem !important;
+}
+
+/* Connected accounts row text */
+.cl-socialButtonsProviderIcon {
+  width: 1.3rem !important;
+  height: 1.3rem !important;
+}
+
+/* "Secured by Clerk" footer - hide or shrink */
+.cl-internal-b3fm6y {
+  font-size: 0.85rem !important;
+}
+
+/* ============================================
+   CLERK PROFILE MODAL - Email & Connected accounts rows
+   These selectors target the content area right panels
+   ============================================ */
+
+/* Email address text in the rows */
+.cl-userEmailAddress,
+[class*="cl-userEmailAddress"] {
+  font-size: 1rem !important;
+}
+
+/* The entire profile section content row */
+.cl-profileSection {
+  font-size: 1rem !important;
+}
+
+/* Text inside profile section rows (email, Google account text) */
+.cl-profileSectionItem__emailAddresses,
+.cl-profileSectionItem__connectedAccounts {
+  font-size: 1rem !important;
+  padding: 0.75rem 0 !important;
+}
+
+/* All text nodes inside the modal main content */
+.cl-scrollBox p,
+.cl-scrollBox span:not([class*="cl-badge"]):not([class*="cl-avatar"]) {
+  font-size: 1rem !important;
+}
+
+/* Primary badge */
+.cl-badge--primary,
+[class*="cl-badge"] {
+  font-size: 0.85rem !important;
+  padding: 0.15rem 0.6rem !important;
+  font-weight: 600 !important;
+  border-radius: 9999px !important;
+}
+
+/* "+ Add email address" button link */
+.cl-profileSectionItemButton__addEmailAddress,
+button[class*="addEmail"],
+[class*="cl-profileSectionItemButton"] {
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+}
+
+/* "Google • email@..." connected account row */
+.cl-providerIcon,
+[class*="cl-providerIcon"] {
+  width: 1.3rem !important;
+  height: 1.3rem !important;
+}
+
+/* Three-dot action menu button */
+[class*="cl-profileSectionItemActions"] button {
+  width: 2rem !important;
+  height: 2rem !important;
+  font-size: 1rem !important;
 }
