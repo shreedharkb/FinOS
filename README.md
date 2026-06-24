@@ -1,5 +1,8 @@
 <div align="center">
   <br />
+  <a href="https://fin-os-self.vercel.app/">
+    <img src="https://fin-os-self.vercel.app/favicon.ico" alt="FinOS Logo" width="120" />
+  </a>
   <h1>FinOS</h1>
   <p><strong>Your Intelligent, AI-Powered Financial Operating System</strong></p>
   <br />
@@ -12,6 +15,12 @@
     <img src="https://img.shields.io/badge/Prisma-ORM-2D3748?style=for-the-badge&logo=prisma" alt="Prisma" />
     <img src="https://img.shields.io/badge/Google_Gemini-AI-4285F4?style=for-the-badge&logo=google" alt="Google Gemini" />
   </p>
+</div>
+
+<br />
+
+<div align="center">
+  <h3><a href="https://fin-os-self.vercel.app/">🟢 Live Demo</a></h3>
 </div>
 
 <br />
@@ -250,4 +259,10 @@ Ensure the following variables are set in your `.env`:
 
 ## 📄 License
 
-This project is licensed under the **MIT License**.
+This project is licensed under the **GNU General Public License v3.0**.
+
+---
+
+<div align="center">
+  <p>Crafted with ❤️ by <strong>Shreedhar K B</strong></p>
+</div>
