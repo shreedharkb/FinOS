@@ -67,49 +67,63 @@ flowchart TD
     classDef db fill:#d97706,stroke:#78350f,color:#fff
     classDef worker fill:#4f46e5,stroke:#312e81,color:#fff
 
-    subgraph Client["Client / UI Layer"]
-        UI["Next.js 15 App Router<br>React 19 Server Components"]:::client
+    React["Next.js 15 App Router<br>React 19 SPA & Server Components"]:::client
+
+    subgraph EdgeGateway["Edge Security & Auth Gateway"]
+        ClerkAuth["Clerk Middleware<br>JWT & Session Cookie Validation"]:::edge
+        ArcjetWAF["Arcjet Shield<br>Bot Protection & 100 req/min Rate Limit"]:::edge
     end
 
-    subgraph Security["Edge Security & Gateway"]
-        Auth["Clerk Identity Auth<br>Session Validation"]:::edge
-        WAF["Arcjet WAF<br>Rate Limiting & Bot Shield"]:::edge
+    React -->|"HTTPS Requests /<br>Form Submissions"| ClerkAuth
+    ClerkAuth -->|"Unauthenticated"| LoginRedirect["Redirect to /sign-in"]:::client
+    ClerkAuth -->|"Authenticated JWT"| ArcjetWAF
+    ArcjetWAF -->|"Rate Limit Exceeded / Bot"| Block429["Return 429 Too Many Requests"]:::edge
+
+    subgraph ServerActions["Next.js Server Actions (Business Logic)"]
+        ScanReceipt["scanReceiptAction()<br>Receipt Image Upload"]:::action
+        CreateTx["createTransactionAction()<br>Manual Entry / Recurring Sync"]:::action
+        UpdateAccount["updateAccountBalance()<br>Account Mutation"]:::action
+        EvaluateBudget["checkBudgetAlerts()<br>Threshold Monitor"]:::action
     end
 
-    subgraph Logic["Next.js Server Actions"]
-        UploadAction["Receipt Upload Handler"]:::action
-        ManualAction["Manual Transaction Mutation"]:::action
-        BudgetCheck["Budget Threshold Evaluator"]:::action
+    ArcjetWAF -->|"Allowed Request"| ScanReceipt
+    ArcjetWAF -->|"Allowed Request"| CreateTx
+    ArcjetWAF -->|"Allowed Request"| UpdateAccount
+
+    subgraph AIEngine["AI Vision Processing Layer"]
+        GeminiVision["Google Gemini 1.5 Flash Vision<br>Structured JSON Prompt Parsing"]:::ai
     end
 
-    subgraph Intelligence["AI Vision Engine"]
-        Gemini["Google Gemini 1.5 Vision<br>Structured JSON Extraction"]:::ai
+    ScanReceipt -->|"Base64 Image Payload +<br>System Prompt Schema"| GeminiVision
+    GeminiVision -->|"Parsed JSON<br>{merchant, amount, date, category}"| CreateTx
+
+    subgraph DataPersistence["Relational Persistence Layer"]
+        PrismaClient["Prisma ORM Client<br>Connection Pooled"]:::db
+        SupabasePG[(Supabase PostgreSQL 16<br>Users, Accounts, Transactions, Budgets)]:::db
     end
 
-    subgraph Data["Persistence Layer"]
-        Prisma["Prisma ORM Client"]:::db
-        Postgres[(Supabase PostgreSQL<br>Normalized Financial Store)]:::db
+    CreateTx -->|"Validate & Mutate<br>Transaction Table"| PrismaClient
+    UpdateAccount -->|"Update Account<br>Balance & Default"| PrismaClient
+    PrismaClient <-->|"TCP Pool / Direct SSL"| SupabasePG
+
+    CreateTx -->|"Trigger Post-Mutation<br>Evaluation"| EvaluateBudget
+    EvaluateBudget <-->|"Query Monthly Spend vs.<br>Budget Thresholds"| PrismaClient
+
+    subgraph AsyncInfrastructure["Asynchronous Event & Email Workers"]
+        InngestBroker["Inngest Event Broker<br>Serverless Event Dispatcher"]:::worker
+        BudgetAlertJob["Inngest Worker<br>budget/alert.triggered"]:::worker
+        MonthlyReportCron["Inngest Cron<br>reports/monthly.generate"]:::worker
+        ResendEngine["Resend Email API<br>React Email Templates"]:::worker
     end
 
-    subgraph Queues["Async Background Workers"]
-        Inngest["Inngest Event Queue<br>Serverless Job Scheduler"]:::worker
-        Resend["Resend Email Engine<br>Monthly Reports & Alerts"]:::worker
-    end
+    EvaluateBudget -->|"Emit Event<br>budget/alert.triggered"| InngestBroker
+    InngestBroker --> BudgetAlertJob
+    InngestBroker --> MonthlyReportCron
+    MonthlyReportCron <-->|"Aggregate Monthly Spend<br>by Category"| PrismaClient
 
-    %% Flow Connections
-    UI --> Auth
-    Auth -- Verified --> WAF
-    WAF -- Allowed --> UploadAction & ManualAction
-
-    UploadAction --> Gemini
-    Gemini -- Parsed Vendor/Amount --> Prisma
-
-    ManualAction --> Prisma
-    Prisma <--> Postgres
-
-    Prisma --> BudgetCheck
-    BudgetCheck -- Threshold Exceeded --> Inngest
-    Inngest --> Resend
+    BudgetAlertJob -->|"Dispatch Alert HTML"| ResendEngine
+    MonthlyReportCron -->|"Dispatch Monthly Summary"| ResendEngine
+    ResendEngine -->|"SMTP / HTTP Push"| UserInbox["User Email Inbox"]:::client
 ```
 
 ---
