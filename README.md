@@ -19,7 +19,7 @@
 
   <br />
   <a href="https://fin-os-self.vercel.app/">
-    <img src="https://img.shields.io/badge/🚀_View_Live_Deployment-fin--os--self.vercel.app-2563eb?style=for-the-badge" alt="Live Demo" />
+    <img src="https://img.shields.io/badge/_View_Live_Deployment-fin--os--self.vercel.app-2563eb?style=for-the-badge" alt="Live Demo" />
   </a>
 </div>
 
@@ -29,28 +29,28 @@
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
-- [✨ Core Capabilities](#-core-capabilities)
-- [🏗️ System Architecture](#-system-architecture)
-- [🗄️ Database Entity-Relationship Schema](#-database-entity-relationship-schema)
-- [⚡ Technical Challenges & Solutions](#-technical-challenges--solutions)
-- [💻 Tech Stack](#-tech-stack)
-- [📁 Project Structure](#-project-structure)
-- [⚙️ Environment Variables](#-environment-variables)
-- [🚀 Quick Start](#-quick-start)
-- [📜 License](#-license)
+- [ Core Capabilities](#-core-capabilities)
+- [ System Architecture](#-system-architecture)
+- [ Database Entity-Relationship Schema](#-database-entity-relationship-schema)
+- [ Technical Challenges & Solutions](#-technical-challenges--solutions)
+- [ Tech Stack](#-tech-stack)
+- [ Project Structure](#-project-structure)
+- [ Environment Variables](#-environment-variables)
+- [ Quick Start](#-quick-start)
+- [ License](#-license)
 
 ---
 
-## ✨ Core Capabilities
+##  Core Capabilities
 
-- **🤖 AI Receipt Parsing**: Upload receipts directly from your mobile device or desktop. Integrated **Google Gemini 1.5 Flash Vision** extracts merchant names, line items, dates, and amounts, automatically categorizing transactions into your database.
-- **📊 Multi-Account Aggregation**: Unified dashboard providing real-time visibility into checking, savings, and credit balances. Track net worth trajectories, cash flow velocity, and spending habits in one place.
-- **🎯 Dynamic Budget Guardrails**: Set custom monthly budgets across diverse categories. Real-time visual progress bars notify you before spending thresholds are breached.
-- **🔄 Recurring Transaction Engine**: Forecast upcoming bills and subscription renewals automatically. Never miss a recurring payment or surprise renewal.
-- **📧 Automated Email Summaries**: Asynchronous background event workers powered by **Inngest** and **Resend** compile and dispatch personalized, beautifully styled monthly financial health reports to your inbox.
-- **🛡️ Enterprise-Grade Security**: Edge-protected by **Arcjet WAF** to actively block SQL injection, bot attacks, and rate-limit abuse, seamlessly authenticated via **Clerk**.
+- **AI Receipt Parsing**: Upload receipts directly from your mobile device or desktop. Integrated **Google Gemini 1.5 Flash Vision** extracts merchant names, line items, dates, and amounts, automatically categorizing transactions into your database.
+- **Multi-Account Aggregation**: Unified dashboard providing real-time visibility into checking, savings, and credit balances. Track net worth trajectories, cash flow velocity, and spending habits in one place.
+- **Dynamic Budget Guardrails**: Set custom monthly budgets across diverse categories. Real-time visual progress bars notify you before spending thresholds are breached.
+- **Recurring Transaction Engine**: Forecast upcoming bills and subscription renewals automatically. Never miss a recurring payment or surprise renewal.
+- **Automated Email Summaries**: Asynchronous background event workers powered by **Inngest** and **Resend** compile and dispatch personalized, beautifully styled monthly financial health reports to your inbox.
+- **Enterprise-Grade Security**: Edge-protected by **Arcjet WAF** to actively block SQL injection, bot attacks, and rate-limit abuse, seamlessly authenticated via **Clerk**.
 
 ---
 
@@ -114,7 +114,7 @@ flowchart TD
 
 ---
 
-## 🗄️ Database Entity-Relationship Schema
+## Database Entity-Relationship Schema
 
 FinOS implements a strict relational database schema in PostgreSQL, managed via Prisma ORM for type-safe database queries.
 
@@ -177,7 +177,7 @@ erDiagram
 
 ---
 
-## ⚡ Technical Challenges & Solutions
+##  Technical Challenges & Solutions
 
 1. **Serverless Timeout Evasion (Inngest Queues)**
    - **Challenge**: Processing automated monthly report calculations across thousands of transactions and dispatching bulk emails frequently hits the strict 10-second serverless execution timeout on Vercel.
@@ -193,7 +193,7 @@ erDiagram
 
 ---
 
-## 💻 Tech Stack
+##  Tech Stack
 
 | Layer | Technology | Purpose |
 | :--- | :--- | :--- |
@@ -210,7 +210,7 @@ erDiagram
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```text
 FinOS/
@@ -231,7 +231,7 @@ FinOS/
 
 ---
 
-## ⚙️ Environment Variables
+##  Environment Variables
 
 Create a `.env` file in the project root with the following configuration keys:
 
@@ -248,7 +248,7 @@ Create a `.env` file in the project root with the following configuration keys:
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### 1. Clone & Install Dependencies
 ```bash
@@ -285,7 +285,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to experienc
 
 ---
 
-## 📜 License
+##  License
 
 This project is licensed under the **GNU General Public License v3.0**.
 
