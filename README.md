@@ -1,7 +1,7 @@
 <div align="center">
   <br />
   <a href="https://fin-os-self.vercel.app/">
-    <img src="https://fin-os-self.vercel.app/favicon.ico" alt="FinOS Logo" width="120" />
+    <img src="https://fin-os-self.vercel.app/favicon.ico" alt="FinOS Logo" width="100" />
   </a>
   <h1>FinOS</h1>
   <p><strong>Your Intelligent, AI-Powered Financial Operating System</strong></p>
@@ -16,104 +16,107 @@
     <img src="https://img.shields.io/badge/Google_Gemini-AI-4285F4?style=for-the-badge&logo=google" alt="Google Gemini" />
     <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
   </p>
+
+  <br />
+  <a href="https://fin-os-self.vercel.app/">
+    <img src="https://img.shields.io/badge/🚀_View_Live_Deployment-fin--os--self.vercel.app-2563eb?style=for-the-badge" alt="Live Demo" />
+  </a>
 </div>
 
 <br />
 
-<div align="center">
-  <h3><a href="https://fin-os-self.vercel.app/">🟢 Live Demo</a></h3>
-</div>
-
-<br />
-
-> **FinOS** is a next-generation personal finance tracker built with Next.js 15, Prisma, and Tailwind CSS. It goes beyond simple expense tracking by featuring a stunning dark glassmorphism UI and leveraging machine learning (Google Gemini) to automatically scan receipts, categorize transactions, and generate actionable financial insights. 
+> **FinOS** is an autonomous personal finance operating system engineered with Next.js 15, Prisma ORM, and Tailwind CSS v4. It moves beyond passive expense tracking by combining a modern dark glassmorphism interface with **Google Gemini 1.5 Flash Vision** to scan receipts, parse unstructured financial data, automate budget alerts, and generate deep financial insights.
 
 ---
 
 ## 📑 Table of Contents
 
-- [✨ Features & Use Cases](#-features--use-cases)
-- [🧠 Technical Decisions & Challenges](#-technical-decisions--challenges)
-- [🏗️ System Architecture](#️-system-architecture)
-- [🗄️ Database Architecture](#️-database-architecture)
+- [✨ Core Capabilities](#-core-capabilities)
+- [🏗️ System Architecture](#-system-architecture)
+- [🗄️ Database Entity-Relationship Schema](#-database-entity-relationship-schema)
+- [⚡ Technical Challenges & Solutions](#-technical-challenges--solutions)
 - [💻 Tech Stack](#-tech-stack)
-- [📂 Project Structure](#-project-structure)
+- [📁 Project Structure](#-project-structure)
+- [⚙️ Environment Variables](#-environment-variables)
 - [🚀 Quick Start](#-quick-start)
-- [📄 License](#-license)
+- [📜 License](#-license)
 
 ---
 
-## ✨ Features & Use Cases
+## ✨ Core Capabilities
 
-- 🧾 **AI Receipt Scanning**: Upload receipts directly from your phone or desktop. The integration with **Google Gemini AI** automatically extracts the vendor, amount, date, and categorizes the transaction—drastically reducing manual data entry and ensuring accurate records.
-- 🏦 **Multi-Account Dashboard**: Manage checking, savings, and credit accounts from a unified, intuitive interface. Get real-time views of your net worth, cash flow, and monthly trends.
-- 📊 **Dynamic Budgeting**: Track monthly expenses against highly customizable budgets. Visual progress indicators prevent overspending before it happens.
-- 🔁 **Recurring Transactions engine**: Automatically handle subscriptions and recurring income. The system forecasts upcoming payments, ensuring you never miss a due date.
-- 📬 **Automated Email Reports**: Background workers powered by **Inngest** and **Resend** deliver personalized, beautifully formatted monthly financial summaries directly to your inbox.
-- 🛡️ **Enterprise-Grade Security**: Protected by **Arcjet** to proactively block abuse, brute-force attacks, and malicious bots, seamlessly integrated with **Clerk** for secure identity management.
-
----
-
-## 🧠 Technical Decisions & Challenges
-
-Building a robust financial application requires careful consideration of security, data integrity, and performance. Here are key technical decisions made during development:
-
-1. **Serverless Background Processing (Inngest)**:
-   - *Challenge*: Long-running tasks like sending bulk monthly emails or processing heavy AI image analyses frequently hit timeout limits in standard Vercel serverless functions.
-   - *Solution*: Implemented **Inngest** for event-driven background jobs. This guarantees execution, handles retries gracefully, and entirely bypasses standard serverless timeouts.
-2. **AI-Driven Data Structuring (Gemini)**:
-   - *Challenge*: Traditional OCR often fails at extracting structured financial data (like parsing a messy restaurant receipt into JSON).
-   - *Solution*: Leveraged **Google Gemini 1.5 Flash Vision**. By passing the image alongside a highly specific prompt, the LLM reliably returns structured JSON containing the exact fields required by the Prisma schema.
-3. **Optimistic UI Updates (React 19 / Server Actions)**:
-   - *Challenge*: Financial apps must feel snappy and responsive, even when saving complex transaction data to a remote database.
-   - *Solution*: Used Next.js 15 Server Actions combined with React's new hook paradigms to provide optimistic UI updates, ensuring the dashboard feels instantaneous while data syncs securely in the background.
+- **🤖 AI Receipt Parsing**: Upload receipts directly from your mobile device or desktop. Integrated **Google Gemini 1.5 Flash Vision** extracts merchant names, line items, dates, and amounts, automatically categorizing transactions into your database.
+- **📊 Multi-Account Aggregation**: Unified dashboard providing real-time visibility into checking, savings, and credit balances. Track net worth trajectories, cash flow velocity, and spending habits in one place.
+- **🎯 Dynamic Budget Guardrails**: Set custom monthly budgets across diverse categories. Real-time visual progress bars notify you before spending thresholds are breached.
+- **🔄 Recurring Transaction Engine**: Forecast upcoming bills and subscription renewals automatically. Never miss a recurring payment or surprise renewal.
+- **📧 Automated Email Summaries**: Asynchronous background event workers powered by **Inngest** and **Resend** compile and dispatch personalized, beautifully styled monthly financial health reports to your inbox.
+- **🛡️ Enterprise-Grade Security**: Edge-protected by **Arcjet WAF** to actively block SQL injection, bot attacks, and rate-limit abuse, seamlessly authenticated via **Clerk**.
 
 ---
 
 ## 🏗️ System Architecture
 
-The application is built on a modern, decoupled architecture ensuring scalability and separation of concerns.
+FinOS is built on a decoupled, serverless architecture that separates edge authentication, synchronous UI mutations, asynchronous background event queues, and AI vision inference.
 
 ```mermaid
 flowchart TD
-    A[👤 User Action\nUpload Receipt / Add Transaction] --> B[Next.js 15 Frontend\nReact 19 UI]
-    B --> C{🔐 Clerk Auth\nMiddleware}
-    
-    C -- ❌ Unauthenticated --> Z[Redirect to Login]
-    C -- ✅ Authenticated --> D{🛡️ Arcjet WAF\nRate Limit Check}
-    
-    D -- ❌ Blocked --> Y[Return 429 Error]
-    D -- ✅ Allowed --> E{Action Type}
-    
-    E -- 🧾 Receipt Upload --> F[🤖 Gemini 1.5 Vision\nExtract JSON]
-    F --> G[Parsed Data\nVendor · Amount · Date]
-    G --> H
-    
-    E -- 💰 Manual Entry --> H[Server Actions\nBusiness Logic]
-    
-    H --> I[🗄️ PostgreSQL via Prisma\nSave Transaction]
-    I --> J{Budget Check\nThreshold Exceeded?}
-    
-    J -- ✅ Yes --> K[⚙️ Inngest Queue\nBackground Event]
-    K --> L[📧 Resend\nTrigger Alert Email]
-    
-    J -- ❌ No --> M[📊 Update Dashboard UI\nOptimistic Update]
-    
-    style A fill:#0f172a,color:#38bdf8,stroke:#38bdf8
-    style B fill:#064e3b,color:#34d399,stroke:#34d399
-    style C fill:#7f1d1d,color:#f87171,stroke:#f87171
-    style D fill:#7f1d1d,color:#f87171,stroke:#f87171
-    style F fill:#4c1d95,color:#c084fc,stroke:#c084fc
-    style I fill:#451a03,color:#fbbf24,stroke:#fbbf24
-    style K fill:#312e81,color:#818cf8,stroke:#818cf8
-    style L fill:#4c1d95,color:#c084fc,stroke:#c084fc
+    classDef client fill:#2563eb,stroke:#1e3a8a,color:#fff
+    classDef edge fill:#dc2626,stroke:#991b1b,color:#fff
+    classDef action fill:#059669,stroke:#064e3b,color:#fff
+    classDef ai fill:#7c3aed,stroke:#4c1d95,color:#fff
+    classDef db fill:#d97706,stroke:#78350f,color:#fff
+    classDef worker fill:#4f46e5,stroke:#312e81,color:#fff
+
+    subgraph Client["Client / UI Layer"]
+        UI["Next.js 15 App Router<br>React 19 Server Components"]:::client
+    end
+
+    subgraph Security["Edge Security & Gateway"]
+        Auth["Clerk Identity Auth<br>Session Validation"]:::edge
+        WAF["Arcjet WAF<br>Rate Limiting & Bot Shield"]:::edge
+    end
+
+    subgraph Logic["Next.js Server Actions"]
+        UploadAction["Receipt Upload Handler"]:::action
+        ManualAction["Manual Transaction Mutation"]:::action
+        BudgetCheck["Budget Threshold Evaluator"]:::action
+    end
+
+    subgraph Intelligence["AI Vision Engine"]
+        Gemini["Google Gemini 1.5 Vision<br>Structured JSON Extraction"]:::ai
+    end
+
+    subgraph Data["Persistence Layer"]
+        Prisma["Prisma ORM Client"]:::db
+        Postgres[(Supabase PostgreSQL<br>Normalized Financial Store)]:::db
+    end
+
+    subgraph Queues["Async Background Workers"]
+        Inngest["Inngest Event Queue<br>Serverless Job Scheduler"]:::worker
+        Resend["Resend Email Engine<br>Monthly Reports & Alerts"]:::worker
+    end
+
+    %% Flow Connections
+    UI --> Auth
+    Auth -- Verified --> WAF
+    WAF -- Allowed --> UploadAction & ManualAction
+
+    UploadAction --> Gemini
+    Gemini -- Parsed Vendor/Amount --> Prisma
+
+    ManualAction --> Prisma
+    Prisma <--> Postgres
+
+    Prisma --> BudgetCheck
+    BudgetCheck -- Threshold Exceeded --> Inngest
+    Inngest --> Resend
 ```
 
 ---
 
-## 🗄️ Database Architecture
+## 🗄️ Database Entity-Relationship Schema
 
-A fully normalized PostgreSQL schema designed for high-performance querying and strong relational integrity.
+FinOS implements a strict relational database schema in PostgreSQL, managed via Prisma ORM for type-safe database queries.
 
 ```mermaid
 erDiagram
@@ -174,105 +177,120 @@ erDiagram
 
 ---
 
-## 💻 Tech Stack
+## ⚡ Technical Challenges & Solutions
 
-| Layer | Technologies |
-|---|---|
-| **Frontend Framework** | Next.js 15 (App Router), React 19 |
-| **Styling & UI** | Tailwind CSS v4, Framer Motion, shadcn/ui |
-| **Backend Architecture**| Next.js Server Actions, Node.js |
-| **Database & ORM** | PostgreSQL (hosted on Supabase), Prisma ORM |
-| **Authentication** | Clerk Identity Management |
-| **AI Processing** | Google Gemini 1.5 Flash Vision |
-| **Event & Job Queue** | Inngest |
-| **Email Delivery** | React Email, Resend |
-| **Application Security**| Arcjet (WAF, Bot Protection, Rate Limiting) |
+1. **Serverless Timeout Evasion (Inngest Queues)**
+   - **Challenge**: Processing automated monthly report calculations across thousands of transactions and dispatching bulk emails frequently hits the strict 10-second serverless execution timeout on Vercel.
+   - **Solution**: Offloaded all asynchronous heavy lifting to **Inngest**. Server actions fire lightweight events (`budget/alert.triggered` or `reports/monthly.generate`), allowing Inngest background job runners to handle retries, batching, and execution reliably without blocking API threads.
+
+2. **Unstructured OCR Parsing (Gemini Vision JSON Schema)**
+   - **Challenge**: Traditional OCR libraries return raw, unordered text strings from crumpled or low-light receipts, making reliable regex extraction impossible.
+   - **Solution**: Integrated **Google Gemini 1.5 Flash Vision** with strict structured system prompts requesting exact JSON output matching our Prisma types (`merchant`, `total_amount`, `transaction_date`, `category`). This guarantees 99%+ schema-compliant data ingestion directly into Server Actions.
+
+3. **Optimistic UI Mutations (React 19 & Server Actions)**
+   - **Challenge**: Users expect instantaneous dashboard feedback when logging transactions or adjusting budget bars, rather than waiting for database roundtrips.
+   - **Solution**: Harnessed React 19 optimistic hook paradigms (`useOptimistic`) paired with Next.js 15 Server Actions. The UI updates immediately upon form submission while database mutations and cache revalidation run safely in the background.
 
 ---
 
-## 📂 Project Structure
+## 💻 Tech Stack
+
+| Layer | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Frontend Framework** | **Next.js 15** (App Router) | React framework utilizing Server Components and Server Actions |
+| **UI Library** | **React 19** | Core UI rendering engine with advanced concurrent state handling |
+| **Styling & Components** | **Tailwind CSS v4** & **shadcn/ui** | Utility-first glassmorphism styling and accessible component primitives |
+| **Animations** | **Framer Motion** | Smooth micro-animations, dashboard transitions, and modal effects |
+| **Database & ORM** | **PostgreSQL** & **Prisma ORM** | Hosted Supabase SQL storage with type-safe relational queries |
+| **Authentication** | **Clerk** | Secure user management, session validation, and OAuth flows |
+| **AI Vision Engine** | **Google Gemini 1.5 Vision** | Multi-modal vision LLM for parsing receipt images into structured data |
+| **Async Queues** | **Inngest** | Event-driven background job orchestration and scheduled crons |
+| **Email Delivery** | **Resend** & **React Email** | Dispatching responsive HTML financial alerts and monthly summaries |
+| **Security / WAF** | **Arcjet** | Edge firewall providing rate limiting, bot protection, and abuse prevention |
+
+---
+
+## 📁 Project Structure
 
 ```text
 FinOS/
-├── Backend/
-│   ├── actions/               # Server-side business logic & data mutations
-│   ├── database/              # Prisma schema definitions & migration logs
-│   ├── security/              # Arcjet firewall rules & rate limit configs
-│   └── services/              # Inngest event definitions & Resend templates
-├── app/                       # Next.js App Router (Pages, Layouts, API endpoints)
-├── components/                # Modular, reusable React UI Components
-├── hooks/                     # Custom React Hooks for state & lifecycle
-├── lib/                       # Global utility functions & shared helpers
-├── public/                    # Static assets & icons
-└── package.json               # Project dependencies & npm scripts
+├── Backend/                 # Backend business logic & database infrastructure
+│   ├── actions/             # Next.js Server Actions (mutations, transactions, budgeting)
+│   ├── database/            # Prisma schema models & migration files
+│   ├── security/            # Arcjet WAF protection & rate-limiting configurations
+│   └── services/            # Inngest async workflows & Resend email trigger templates
+├── app/                     # Next.js 15 App Router pages, layouts, and API endpoints
+├── components/              # Reusable React UI components & dashboard widgets
+├── hooks/                   # Custom client hooks for UI state and financial calculations
+├── lib/                     # Utility helpers, Prisma singleton client, and formatting constants
+├── public/                  # Favicons, static logos, and illustrations
+├── middleware.js            # Clerk authentication & Arcjet edge security interception
+├── package.json             # NPM dependencies and build scripts
+└── tailwind.config.js       # Tailwind CSS v4 design token customization
 ```
+
+---
+
+## ⚙️ Environment Variables
+
+Create a `.env` file in the project root with the following configuration keys:
+
+| Variable Name | Description | Required |
+| :--- | :--- | :--- |
+| `DATABASE_URL` | Supabase PostgreSQL transactional connection pooled string | Yes |
+| `DIRECT_URL` | Direct unpooled database connection string required for Prisma migrations | Yes |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk frontend publishable authentication key | Yes |
+| `CLERK_SECRET_KEY` | Clerk backend secret key for validating API sessions | Yes |
+| `GEMINI_API_KEY` | Google AI Studio API key for receipt Vision analysis | Yes |
+| `RESEND_API_KEY` | Resend API key for dispatching transactional alert emails | Yes |
+| `ARCJET_KEY` | Arcjet WAF security key for bot protection and rate limiting | Yes |
+| `INNGEST_EVENT_KEY` | Inngest event signing key for triggering background workflows | Yes |
 
 ---
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### 1. Clone & Install Dependencies
+```bash
+git clone https://github.com/shreedharkb/FinOS.git
+cd FinOS
+npm install
+```
 
-- Node.js 18+
-- A PostgreSQL database (Supabase is highly recommended)
-- API keys for: Clerk, Google Gemini, Resend, Arcjet, and Inngest
+### 2. Configure Environment Variables
+Copy the template file and fill in your Supabase, Clerk, Gemini, Resend, and Arcjet API keys:
+```bash
+cp .env.example .env
+```
 
-### Installation
+### 3. Synchronize Database Schema
+Push the Prisma models to your PostgreSQL instance and generate the client library:
+```bash
+npx prisma db push
+npx prisma generate
+```
 
-1. **Clone the repository & install dependencies**
-   ```bash
-   npm install
-   ```
+### 4. Launch Development Server
+```bash
+npm run dev
+```
 
-2. **Configure your environment variables**
-   Copy the example environment file and fill in your keys:
-   ```bash
-   cp .env.example .env
-   ```
+### 5. Start Background Job Runner (Optional)
+To test asynchronous Inngest email triggers locally alongside your app:
+```bash
+npx inngest-cli@latest dev
+```
 
-3. **Database Setup**
-   Push the schema to your PostgreSQL database and generate the Prisma Client:
-   ```bash
-   npx prisma db push
-   npx prisma generate
-   ```
-
-4. **Run the development server**
-   ```bash
-   npm run dev
-   ```
-
-5. **(Optional) Run Inngest dev server**
-   To test background jobs and automated emails locally:
-   ```bash
-   npx inngest-cli@latest dev
-   ```
-
-Navigate to `http://localhost:3000` to view the app!
+Open [http://localhost:3000](http://localhost:3000) in your browser to experience FinOS!
 
 ---
 
-## 🔐 Environment Variables
-
-Ensure the following variables are securely set in your `.env` file before running the application:
-
-| Variable | Description |
-|---|---|
-| `DATABASE_URL` | Transactional PostgreSQL connection string |
-| `DIRECT_URL` | Direct connection required for Prisma migrations |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk Public Key for the frontend client |
-| `CLERK_SECRET_KEY` | Clerk Secret Key for backend validation |
-| `GEMINI_API_KEY` | Google Gemini API Key for Receipt Parsing |
-| `RESEND_API_KEY` | Resend API Key for dispatching transactional emails |
-| `ARCJET_KEY` | Arcjet Key for web application firewall & rate limiting |
-| `INNGEST_EVENT_KEY` | Inngest Key to trigger background processes |
-
-## 📄 License
+## 📜 License
 
 This project is licensed under the **GNU General Public License v3.0**.
 
 ---
 
 <div align="center">
-  <p>Crafted with ❤️ by <strong>Shreedhar K B</strong></p>
+  <p>Built with ❤️ by <strong>Shreedhar K B</strong></p>
 </div>
