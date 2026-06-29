@@ -101,6 +101,8 @@ graph TD
     Inngest -.->|Executes Functions via Webhooks| API_Routes
     
     ServerActions -->|Sends Mail| Resend
+```
+
 Infrastructure layers:
 
 - **Next.js 16 App Router + React 19** renders the dashboard and handles concurrent UI state with optimistic updates.
