@@ -49,40 +49,40 @@ graph TD
     classDef external fill:#f3e8ff,stroke:#9333ea,stroke-width:2px;
 
     %% Client/User
-    User((👤 Client / User)):::user
+    User(("👤 Client / User")):::user
 
     %% Frontend Subgraph
-    subgraph Frontend [Frontend - Next.js App Router]
-        UI[UI Components <br/> React, Tailwind, Shadcn]:::frontend
-        Pages[App Pages <br/> Dashboard, Transactions, Budgets]:::frontend
+    subgraph Frontend ["Frontend - Next.js App Router"]
+        UI["UI Components <br/> React, Tailwind, Shadcn"]:::frontend
+        Pages["App Pages <br/> Dashboard, Transactions, Budgets"]:::frontend
         UI --> Pages
     end
 
     %% Backend Subgraph
-    subgraph Backend [Backend - Next.js Server]
-        Middleware[Next.js Middleware <br/> routing & protection]:::backend
-        AuthCheck[CheckUser <br/> Auth Validation]:::backend
-        ServerActions[Server Actions <br/> Business Logic: Budget, Txns, Accounts]:::backend
-        API_Routes[API Routes <br/> /api/inngest, /api/seed]:::backend
-        Security[Arcjet <br/> Rate Limiting & Bot Protection]:::backend
+    subgraph Backend ["Backend - Next.js Server"]
+        Middleware["Next.js Middleware <br/> routing & protection"]:::backend
+        AuthCheck["CheckUser <br/> Auth Validation"]:::backend
+        ServerActions["Server Actions <br/> Business Logic: Budget, Txns, Accounts"]:::backend
+        API_Routes["API Routes <br/> /api/inngest, /api/seed"]:::backend
+        Security["Arcjet <br/> Rate Limiting & Bot Protection"]:::backend
         
         Middleware --> AuthCheck
         ServerActions --> Security
     end
 
     %% Database Subgraph
-    subgraph DB_Layer [Data Persistence]
-        Prisma[Prisma ORM]:::database
-        DB[(PostgreSQL / Relational DB)]:::database
+    subgraph DB_Layer ["Data Persistence"]
+        Prisma["Prisma ORM"]:::database
+        DB[("PostgreSQL / Relational DB")]:::database
         Prisma --> DB
     end
 
     %% External Services Subgraph
-    subgraph External_Services [Third-Party Services]
-        Clerk[Clerk Auth]:::external
-        Inngest[Inngest <br/> Background Jobs & Cron]:::external
-        Resend[Email Provider <br/> Resend/JSX Templates]:::external
-        ArcjetCloud[Arcjet Cloud]:::external
+    subgraph External_Services ["Third-Party Services"]
+        Clerk["Clerk Auth"]:::external
+        Inngest["Inngest <br/> Background Jobs & Cron"]:::external
+        Resend["Email Provider <br/> Resend/JSX Templates"]:::external
+        ArcjetCloud["Arcjet Cloud"]:::external
     end
 
     %% Interconnections
