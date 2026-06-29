@@ -40,67 +40,64 @@ Every mutation passes through Arcjet WAF (bot defense, rate limiting capped at 1
 FinOS runs on a serverless architecture with clean boundaries between edge authentication, synchronous server actions, asynchronous event workers, and multi-modal AI inference.
 
 ```mermaid
-graph TD
+%%{init: {'themeVariables': { 'edgeLabelBackground':'#1e293b'}}}%%
+flowchart TD
     %% Define Styles
-    classDef user fill:#ffffff,stroke:#0f172a,stroke-width:2px,color:#0f172a;
-    classDef frontend fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e3a8a;
-    classDef backend fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#14532d;
-    classDef database fill:#fefce8,stroke:#eab308,stroke-width:2px,color:#713f12;
-    classDef external fill:#faf5ff,stroke:#a855f7,stroke-width:2px,color:#581c87;
+    classDef user fill:#2563eb,stroke:#1e3a8a,color:#fff
+    classDef frontend fill:#2563eb,stroke:#1e3a8a,color:#fff
+    classDef backend fill:#059669,stroke:#064e3b,color:#fff
+    classDef database fill:#cbd5e1,stroke:#475569,color:#1e293b
+    classDef external fill:#7c3aed,stroke:#4c1d95,color:#fff
 
-    %% Client/User
-    User(("👤 Client / User")):::user
+    User(("👤 Client")):::user
 
-    %% Frontend Subgraph
     subgraph Frontend ["Frontend - Next.js App Router"]
-        UI["UI Components <br/> React, Tailwind, Shadcn"]:::frontend
-        Pages["App Pages <br/> Dashboard, Transactions, Budgets"]:::frontend
+        UI["UI Components<br>(React, Tailwind)"]:::frontend
+        Pages["App Pages<br>(Dashboard, Txns)"]:::frontend
         UI --> Pages
     end
 
-    %% Backend Subgraph
     subgraph Backend ["Backend - Next.js Server"]
-        Middleware["Next.js Middleware <br/> routing & protection"]:::backend
-        AuthCheck["CheckUser <br/> Auth Validation"]:::backend
-        ServerActions["Server Actions <br/> Business Logic: Budget, Txns, Accounts"]:::backend
-        API_Routes["API Routes <br/> /api/inngest, /api/seed"]:::backend
-        Security["Arcjet <br/> Rate Limiting & Bot Protection"]:::backend
-        
-        Middleware --> AuthCheck
-        ServerActions --> Security
+        Middleware["Next.js Middleware<br>(Routing)"]:::backend
+        ServerActions["Server Actions<br>(Business Logic)"]:::backend
+        APIRoutes["API Routes<br>(Webhooks)"]:::backend
     end
 
-    %% Database Subgraph
     subgraph DB_Layer ["Data Persistence"]
         Prisma["Prisma ORM"]:::database
-        DB[("PostgreSQL / Relational DB")]:::database
-        Prisma --> DB
+        DB[("PostgreSQL")]:::database
+        Prisma <--> DB
     end
 
-    %% External Services Subgraph
-    subgraph External_Services ["Third-Party Services"]
-        Clerk["Clerk Auth"]:::external
-        Inngest["Inngest <br/> Background Jobs & Cron"]:::external
-        Resend["Email Provider <br/> Resend/JSX Templates"]:::external
-        ArcjetCloud["Arcjet Cloud"]:::external
+    subgraph External ["External Services"]
+        Clerk["Clerk (Auth)"]:::external
+        Arcjet["Arcjet (WAF)"]:::external
+        Inngest["Inngest (Jobs)"]:::external
+        Resend["Resend (Email)"]:::external
     end
 
-    %% Interconnections
+    %% Connections
     User -->|HTTP/HTTPS| Middleware
     Middleware --> Pages
     Pages -->|Invokes| ServerActions
-    Pages -.->|API Calls| API_Routes
+    Pages -.->|API Calls| APIRoutes
     
-    AuthCheck -->|Validates Session| Clerk
-    Security -->|Verifies Request| ArcjetCloud
+    Middleware <-->|Validates Auth| Clerk
+    ServerActions <-->|Rate Limit| Arcjet
     
-    ServerActions -->|Queries| Prisma
-    API_Routes -->|Queries| Prisma
+    ServerActions <-->|Queries| Prisma
+    APIRoutes <-->|Queries| Prisma
     
     ServerActions -->|Triggers| Inngest
-    Inngest -.->|Executes Functions via Webhooks| API_Routes
+    Inngest -.->|Executes| APIRoutes
     
     ServerActions -->|Sends Mail| Resend
+
+    %% Subgraph Styles
+    style Frontend fill:#1e293b,stroke:#334155,color:#fff
+    style Backend fill:#334155,stroke:#1e293b,color:#fff
+    style DB_Layer fill:#1e293b,stroke:#334155,color:#fff
+    style External fill:#334155,stroke:#1e293b,color:#fff
 ```
 
 Infrastructure layers:
@@ -265,6 +262,24 @@ npx inngest-cli@latest dev
 | `DIRECT_URL` | Direct unpooled connection string, required for Prisma migrations |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk frontend publishable key |
 | `CLERK_SECRET_KEY` | Clerk backend secret key |
+| `GEMINI_API_KEY` | Google AI Studio key for Vision parsing and insights |
+| `RESEND_API_KEY` | Resend key for transactional emails |
+| `ARCJET_KEY` | Arcjet WAF security key |
+| `INNGEST_EVENT_KEY` | Inngest event signing key |
+
+## Documentation
+
+- [System Architecture](#architecture)
+- [Database Schema](#database-schema)
+- [API / Server Actions](Backend/actions)
+
+## Author
+
+**Shreedhar K B** — Design, development, and deployment.
+
+## License
+
+This project is licensed under the GNU General Public License v3.0.` | Clerk backend secret key |
 | `GEMINI_API_KEY` | Google AI Studio key for Vision parsing and insights |
 | `RESEND_API_KEY` | Resend key for transactional emails |
 | `ARCJET_KEY` | Arcjet WAF security key |
