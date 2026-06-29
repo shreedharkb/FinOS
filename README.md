@@ -40,64 +40,82 @@ Every mutation passes through Arcjet WAF (bot defense, rate limiting capped at 1
 FinOS runs on a serverless architecture with clean boundaries between edge authentication, synchronous server actions, asynchronous event workers, and multi-modal AI inference.
 
 ```mermaid
-%%{init: {'themeVariables': { 'edgeLabelBackground':'#1e293b'}}}%%
-flowchart TD
-    %% Define Styles
-    classDef user fill:#2563eb,stroke:#1e3a8a,color:#fff
-    classDef frontend fill:#2563eb,stroke:#1e3a8a,color:#fff
-    classDef backend fill:#059669,stroke:#064e3b,color:#fff
-    classDef database fill:#cbd5e1,stroke:#475569,color:#1e293b
-    classDef external fill:#7c3aed,stroke:#4c1d95,color:#fff
-
-    User(("👤 Client")):::user
-
-    subgraph Frontend ["Frontend - Next.js App Router"]
-        UI["UI Components<br>(React, Tailwind)"]:::frontend
-        Pages["App Pages<br>(Dashboard, Txns)"]:::frontend
-        UI --> Pages
+graph TB
+    subgraph "Client Layer"
+        WEB[Web Browser]
+        MOB[Mobile Device]
     end
-
-    subgraph Backend ["Backend - Next.js Server"]
-        Middleware["Next.js Middleware<br>(Routing)"]:::backend
-        ServerActions["Server Actions<br>(Business Logic)"]:::backend
-        APIRoutes["API Routes<br>(Webhooks)"]:::backend
+    
+    subgraph "Edge & Security"
+        MID[Next.js Middleware<br/>Routing]
+        CLERK[Clerk Auth<br/>Session Validation]
+        WAF[Arcjet WAF<br/>Bot Protection]
+        
+        WEB --> MID
+        MOB --> MID
+        MID <--> CLERK
+        MID <--> WAF
     end
-
-    subgraph DB_Layer ["Data Persistence"]
-        Prisma["Prisma ORM"]:::database
-        DB[("PostgreSQL")]:::database
-        Prisma <--> DB
+    
+    subgraph "Frontend: App Router"
+        FE[Frontend Pipeline]
+        
+        subgraph "UI & State"
+            UI[React Components<br/>Tailwind + Shadcn]
+            PAGE[App Pages<br/>Dashboard & Budgets]
+        end
+        
+        MID --> FE
+        FE --> UI
+        UI --> PAGE
     end
-
-    subgraph External ["External Services"]
-        Clerk["Clerk (Auth)"]:::external
-        Arcjet["Arcjet (WAF)"]:::external
-        Inngest["Inngest (Jobs)"]:::external
-        Resend["Resend (Email)"]:::external
+    
+    subgraph "Backend: Server Actions"
+        SA[Server Actions Engine]
+        DEC{Is Async/AI<br/>Task?}
+        
+        PAGE --> SA
+        SA --> DEC
     end
-
-    %% Connections
-    User -->|HTTP/HTTPS| Middleware
-    Middleware --> Pages
-    Pages -->|Invokes| ServerActions
-    Pages -.->|API Calls| APIRoutes
     
-    Middleware <-->|Validates Auth| Clerk
-    ServerActions <-->|Rate Limit| Arcjet
+    subgraph "Tier 2: Async & AI Processing"
+        T2[Async Pipeline]
+        
+        subgraph "Workers & Models"
+            AI[Google Gemini 1.5<br/>Vision & Insights]
+            JOB[Inngest Workers<br/>Crons & Webhooks]
+        end
+        
+        DEC -->|Yes| T2
+        T2 --> AI
+        T2 --> JOB
+    end
     
-    ServerActions <-->|Queries| Prisma
-    APIRoutes <-->|Queries| Prisma
+    subgraph "Data Layer"
+        PRISMA[Prisma ORM<br/>Type-safe Client]
+        DB[(Supabase PostgreSQL<br/>Relational Store)]
+        
+        SA --> PRISMA
+        JOB --> PRISMA
+        PRISMA <--> DB
+    end
     
-    ServerActions -->|Triggers| Inngest
-    Inngest -.->|Executes| APIRoutes
+    subgraph "Output Layer"
+        DASH[Live Dashboard<br/>Optimistic Updates]
+        EMAIL[Resend Email<br/>Alerts & Reports]
+    end
     
-    ServerActions -->|Sends Mail| Resend
-
-    %% Subgraph Styles
-    style Frontend fill:#1e293b,stroke:#334155,color:#fff
-    style Backend fill:#334155,stroke:#1e293b,color:#fff
-    style DB_Layer fill:#1e293b,stroke:#334155,color:#fff
-    style External fill:#334155,stroke:#1e293b,color:#fff
+    DEC -->|No| PRISMA
+    SA --> DASH
+    JOB --> EMAIL
+    AI --> PRISMA
+    
+    style FE fill:#e3f2fd
+    style T2 fill:#fff3e0
+    style PRISMA fill:#f3e5f5
+    style MID fill:#e8f5e9
+    style DASH fill:#fce4ec
+    style EMAIL fill:#1428a0,color:#fff
 ```
 
 Infrastructure layers:
