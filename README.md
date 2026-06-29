@@ -42,11 +42,11 @@ FinOS runs on a serverless architecture with clean boundaries between edge authe
 ```mermaid
 graph TD
     %% Define Styles
-    classDef user fill:#f9f9f9,stroke:#333,stroke-width:2px;
-    classDef frontend fill:#e0f2fe,stroke:#0284c7,stroke-width:2px;
-    classDef backend fill:#dcfce7,stroke:#16a34a,stroke-width:2px;
-    classDef database fill:#fef08a,stroke:#ca8a04,stroke-width:2px;
-    classDef external fill:#f3e8ff,stroke:#9333ea,stroke-width:2px;
+    classDef user fill:#ffffff,stroke:#0f172a,stroke-width:2px,color:#0f172a;
+    classDef frontend fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e3a8a;
+    classDef backend fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#14532d;
+    classDef database fill:#fefce8,stroke:#eab308,stroke-width:2px,color:#713f12;
+    classDef external fill:#faf5ff,stroke:#a855f7,stroke-width:2px,color:#581c87;
 
     %% Client/User
     User(("👤 Client / User")):::user
