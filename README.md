@@ -39,6 +39,7 @@ Every mutation passes through Arcjet WAF (bot defense, rate limiting capped at 1
 
 FinOS runs on a serverless architecture with clean boundaries between edge authentication, synchronous server actions, asynchronous event workers, and multi-modal AI inference.
 
+```mermaid
 graph TD
     %% Define Styles
     classDef user fill:#f9f9f9,stroke:#333,stroke-width:2px;
@@ -100,7 +101,6 @@ graph TD
     Inngest -.->|Executes Functions via Webhooks| API_Routes
     
     ServerActions -->|Sends Mail| Resend
-
 Infrastructure layers:
 
 - **Next.js 16 App Router + React 19** renders the dashboard and handles concurrent UI state with optimistic updates.
