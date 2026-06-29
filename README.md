@@ -39,70 +39,67 @@ Every mutation passes through Arcjet WAF (bot defense, rate limiting capped at 1
 
 FinOS runs on a serverless architecture with clean boundaries between edge authentication, synchronous server actions, asynchronous event workers, and multi-modal AI inference.
 
-title FinOS — System Architecture
+graph TD
+    %% Define Styles
+    classDef user fill:#f9f9f9,stroke:#333,stroke-width:2px;
+    classDef frontend fill:#e0f2fe,stroke:#0284c7,stroke-width:2px;
+    classDef backend fill:#dcfce7,stroke:#16a34a,stroke-width:2px;
+    classDef database fill:#fef08a,stroke:#ca8a04,stroke-width:2px;
+    classDef external fill:#f3e8ff,stroke:#9333ea,stroke-width:2px;
 
-// Client
-User [icon: user, color: blue]
-NextApp [icon: react, label: "Next.js 16 App Router\nReact 19 SPA", color: blue]
+    %% Client/User
+    User((👤 Client / User)):::user
 
-// Edge Security
-Clerk [icon: clerk, label: "Clerk Middleware\nJWT + Session Auth", color: red]
-Arcjet [icon: shield, label: "Arcjet Shield WAF\nBot Defense + Rate Limit", color: red]
+    %% Frontend Subgraph
+    subgraph Frontend [Frontend - Next.js App Router]
+        UI[UI Components <br/> React, Tailwind, Shadcn]:::frontend
+        Pages[App Pages <br/> Dashboard, Transactions, Budgets]:::frontend
+        UI --> Pages
+    end
 
-// Backend Logic
-ServerActions [icon: server, label: "Next.js Server Actions\nscanReceipt · createTransaction\naccount & budget mutations", color: green]
+    %% Backend Subgraph
+    subgraph Backend [Backend - Next.js Server]
+        Middleware[Next.js Middleware <br/> routing & protection]:::backend
+        AuthCheck[CheckUser <br/> Auth Validation]:::backend
+        ServerActions[Server Actions <br/> Business Logic: Budget, Txns, Accounts]:::backend
+        API_Routes[API Routes <br/> /api/inngest, /api/seed]:::backend
+        Security[Arcjet <br/> Rate Limiting & Bot Protection]:::backend
+        
+        Middleware --> AuthCheck
+        ServerActions --> Security
+    end
 
-// AI Layer
-GeminiVision [icon: google, label: "Gemini 1.5 Flash Vision\nReceipt Parsing", color: purple]
-GeminiInsights [icon: google, label: "Gemini 1.5 Flash\nFinancial Insights", color: purple]
+    %% Database Subgraph
+    subgraph DB_Layer [Data Persistence]
+        Prisma[Prisma ORM]:::database
+        DB[(PostgreSQL / Relational DB)]:::database
+        Prisma --> DB
+    end
 
-// Data Layer
-Prisma [icon: prisma, label: "Prisma ORM v6", color: orange]
-Postgres [icon: postgresql, label: "Supabase PostgreSQL 16\nUser, Account, Transaction, Budget", color: orange]
+    %% External Services Subgraph
+    subgraph External_Services [Third-Party Services]
+        Clerk[Clerk Auth]:::external
+        Inngest[Inngest <br/> Background Jobs & Cron]:::external
+        Resend[Email Provider <br/> Resend/JSX Templates]:::external
+        ArcjetCloud[Arcjet Cloud]:::external
+    end
 
-// Async Workers
-Inngest [icon: inngest, label: "Inngest Event Broker", color: indigo]
-CronWorkers [icon: clock, label: "Scheduled Jobs\ncheckBudgetAlert (hourly)\ntriggerRecurringTransactions (daily)\ngenerateMonthlyReports (monthly)", color: indigo]
-Resend [icon: mail, label: "Resend\nReact Email Templates", color: indigo]
-
-// Groups
-EdgeGateway [icon: lock, color: red] {
-  Clerk
-  Arcjet
-}
-
-AIEngine [icon: cpu, color: purple] {
-  GeminiVision
-  GeminiInsights
-}
-
-DataPersistence [icon: database, color: orange] {
-  Prisma
-  Postgres
-}
-
-AsyncInfrastructure [icon: zap, color: indigo] {
-  Inngest
-  CronWorkers
-  Resend
-}
-
-// Flow
-User > NextApp: "HTTPS"
-NextApp > Clerk: "auth request"
-Clerk > Arcjet: "authenticated"
-Arcjet > ServerActions: "allowed request"
-
-ServerActions <> GeminiVision: "image / parsed JSON"
-ServerActions > Prisma: "validate & mutate"
-Prisma <> Postgres: "TCP pool / SSL"
-
-ServerActions > Inngest: "spend threshold event"
-Inngest > CronWorkers: "trigger"
-CronWorkers <> Prisma: "read / write"
-CronWorkers <> GeminiInsights: "aggregated stats / insights"
-CronWorkers > Resend: "alert / summary HTML"
-Resend > User: "SMTP email"
+    %% Interconnections
+    User -->|HTTP/HTTPS| Middleware
+    Middleware --> Pages
+    Pages -->|Invokes| ServerActions
+    Pages -.->|API Calls| API_Routes
+    
+    AuthCheck -->|Validates Session| Clerk
+    Security -->|Verifies Request| ArcjetCloud
+    
+    ServerActions -->|Queries| Prisma
+    API_Routes -->|Queries| Prisma
+    
+    ServerActions -->|Triggers| Inngest
+    Inngest -.->|Executes Functions via Webhooks| API_Routes
+    
+    ServerActions -->|Sends Mail| Resend
 
 Infrastructure layers:
 
